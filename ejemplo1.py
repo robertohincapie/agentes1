@@ -82,7 +82,7 @@ def extract_json_obj(text: str) -> Tuple[Any, str]:
 
 
 
-class Respuesta(BaseModel):
+class Respuesta_marcas(BaseModel):
     anio_separacion: str = Field(..., description="Año de la separación")
     motivo: str = Field(..., description="Motivo factual de la separación")
     marca_original: str = Field(..., description="Nombre de la marca original antes de separarse")
@@ -151,6 +151,7 @@ agente2 = Agent(
    Esto debe ser una lista de diccionarios con campos: marca, dueños por cada marca nueva
    Presenta respuestas factuales, sin inventar información que no se conoce. 
    Si no conoces la información, deja el campo vacío en el json de respuesta. 
+   Todos los campos del objeto json deben ser cadena de texto aunque sean numéricos
    """,
    tools=[WebSearchTool(search_context_size='low')],
    model="gpt-4.1",
@@ -172,7 +173,7 @@ agente3 = Agent(
    tools=[WebSearchTool(search_context_size='low')],
    model="gpt-4.1",
    model_settings=ModelSettings(
-       temperature=0.0,  # Lower for more deterministic outputs (0.0-2.0)
+       temperature=0.8,  # Lower for more deterministic outputs (0.0-2.0)
        #max_tokens=1024,  # Maximum length of response
    ),
 )
@@ -193,6 +194,7 @@ async def main():
                 timeout=30)
             #print("Resultado de la segunda consulta: ",result2.final_output)
             json_data, candidate=extract_json_obj(result2.final_output)
+            print(json_data)
             validacion=validar(json_data)
             print('Validación segunda respuesta: ', validacion)
 
