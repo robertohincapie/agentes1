@@ -6,13 +6,8 @@ from agents import Agent, Runner, trace
 from dotenv import load_dotenv
 load_dotenv() #Carga de la clave de acceso de OpenAI
 """
-This example demonstrates a deterministic flow, where each step is performed by an agent.
-1. The first agent generates a story outline
-2. We feed the outline into the second agent
-3. The second agent checks if the outline is good quality and if it is a scifi story
-4. If the outline is not good quality or not a scifi story, we stop here
-5. If the outline is good quality and a scifi story, we feed the outline into the third agent
-6. The third agent writes the story
+Ejemplo de otros agentes que operan de manera determinística, mostrando tres pasos que al ser correcto
+el resultado de un paso intermedio, puede pasar al siguiente. 
 """
 
 story_outline_agent = Agent(
@@ -58,7 +53,7 @@ async def main():
         )
         print(outline_checker_result.final_output)
         # 3. Add a gate to stop if th.e outline is not good quality or not a scifi story
-        """assert isinstance(outline_checker_result.final_output, OutlineCheckerOutput)
+        assert isinstance(outline_checker_result.final_output, OutlineCheckerOutput)
         if not outline_checker_result.final_output.good_quality:
             print("Outline is not good quality, so we stop here.")
             exit(0)
@@ -75,7 +70,7 @@ async def main():
             outline_result.final_output,
         )
         print(f"Story: {story_result.final_output}")
-"""
+
 
 if __name__ == "__main__":
     asyncio.run(main())

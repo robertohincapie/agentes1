@@ -4,22 +4,11 @@ from agents import Agent, ItemHelpers, Runner, trace, WebSearchTool, ModelSettin
 
 from dotenv import load_dotenv
 load_dotenv()
-
-maestro = Agent(
-    name="Agente maestro",
-    instructions=("Tu debes recibir un nombre de un programa académico, el nivel del mismo y una breve descripción de a qué se refiere. " 
-                  "Con esta información deberás realizar una búsqueda en la web, encontrando primer a nivel del país Colombia, luego en Latinoamérica programas similares "
-                  "con esta información, deberás construir un listado de programas con la siguiente información por cada programa: "
-                  "Nombre del programa, nivel del programa, universidad que lo ofrece"
-                  ) ,
-    tools=[WebSearchTool(search_context_size='low')],
-    model="gpt-4.1",
-    model_settings=ModelSettings(
-       temperature=0.2,  # Lower for more deterministic outputs (0.0-2.0)
-       #max_tokens=1024,  # Maximum length of response
-    ),
-   output_type=str
-)
+"""
+Este modelo implementa la arquitectura de agentes determinísticos y secuenciales, pero permite
+definir dentro de un agente, otro agente que desarrolla tareas para él. En este caso, la arquitectura
+se conoce como agents as tools. 
+"""
 
 buscador_programa = Agent(
     name="Agente buscador de programas",
@@ -55,6 +44,22 @@ arquitecto_de_busqueda = Agent(
    output_type=str
 )
 
+maestro = Agent(
+    name="Agente maestro",
+    instructions=("Tu debes recibir un nombre de un programa académico, el nivel del mismo y una breve descripción de a qué se refiere. " 
+                  "Con esta información deberás realizar una búsqueda en la web, encontrando primer a nivel del país Colombia, luego en Latinoamérica programas similares "
+                  "con esta información, deberás construir un listado de programas con la siguiente información por cada programa: "
+                  "Nombre del programa, nivel del programa, universidad que lo ofrece"
+                  ) ,
+    tools=[WebSearchTool(search_context_size='low')],
+    model="gpt-4.1",
+    model_settings=ModelSettings(
+       temperature=0.2,  # Lower for more deterministic outputs (0.0-2.0)
+       #max_tokens=1024,  # Maximum length of response
+    ),
+   output_type=str
+)
+
 async def main():
     input_prompt = input("Escriba el nombre del programa, su nivel académico y una breve descripción del mismo:")
 
@@ -67,7 +72,6 @@ async def main():
         resultado_maestro.final_output
     )
     print("Resultado final:", resultado_busqueda.final_output)
-
 
 if __name__ == "__main__":
     asyncio.run(main())

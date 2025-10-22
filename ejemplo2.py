@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+"""
+Este modelo plantea un conjunto de agentes que operan bajo una arquitectura funcional determinística
+donde cada uno va haciendo una operación, evaluando y continuando hacia el otro. 
+"""
 import asyncio, threading
 from agents import Agent, Runner, ModelSettings, WebSearchTool, function_tool
 from dotenv import load_dotenv
@@ -27,10 +31,7 @@ def validar(info: Respuesta_marcas) -> bool:
         print('Marcas resultantes:',flag_marcas)
         flag=flag_anio and flag_motivo and flag_marca and flag_marcas
         print('Se procede a validar las marcas nuevas y los dueños')
-        #for d2 in info['marcas_resultantes']:
-        #   flag=flag and len(d2['marca'])>0 and len(d2['dueños'])>0 
-        #if(not(flag)): 
-        #    print('En la validación, falta alguno de los datos')
+
         return flag
     except Exception as e:
         print('Ocurrió una excepción en la validación: ',e)
